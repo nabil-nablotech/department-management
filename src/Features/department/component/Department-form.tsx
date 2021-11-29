@@ -109,7 +109,7 @@ export default function DepartmentForm (props:IProps): JSX.Element{
 
           <Form.Item name="parentDepartmentId" label="Managing department">
             <Select listHeight={150} placeholder="Select managing department">
-              {departments.map((department:any)=>{return(<Select.Option key={department.id} value={department.id}>{department.name}</Select.Option>);})}
+              { departments.filter((department:any)=>{return department.id!==props.id}).map((department:any)=>{return(<Select.Option key={department.id} value={department.id}>{department.name}</Select.Option>);})}
             </Select>
           </Form.Item>
 
