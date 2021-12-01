@@ -1,5 +1,6 @@
 import { useEffect, useState} from "react";
-import { Form, Input, Button, Select,message } from 'antd';
+import { Form, Input, Button, Select,message,TreeSelect } from 'antd';
+import IDepartment from '../../../../models/Department';
 import { RootStateOrAny,useDispatch,useSelector }  from 'react-redux';
 import {createDepartment,getDepartments,updateDepartment} from '../store/reducer';
 import { useNavigate } from 'react-router-dom';
@@ -20,6 +21,7 @@ export default function DepartmentForm (props:IProps): JSX.Element{
     const [form] = Form.useForm();
     const successMsg = props.mode==='new'? 'Department registered successfully.' : 'Department details updated successfully.';
     const errorMsg = props.mode==='new'? 'Connection to the server failed. Sorry could not register new department. Please try again later.' : 'Connection to the server failed. Sorry could not update department details. Please try again later.';
+    const treeData = departments.map((department:IDepartment)=>{ return {id:department.id,pId:department.parentDepartmentId,title:department.name,value:department.id}});
 
     let departmentDetails = null;
 
@@ -108,9 +110,13 @@ export default function DepartmentForm (props:IProps): JSX.Element{
           </Form.Item>
 
           <Form.Item name="parentDepartmentId" label="Managing department">
-            <Select listHeight={150} placeholder="Select managing department">
-              { departments.filter((department:any)=>{return department.id!==props.id}).map((department:any)=>{return(<Select.Option key={department.id} value={department.id}>{department.name}</Select.Option>);})}
-            </Select>
+          <TreeSelect
+                
+                treeData={treeData}
+                treeDataSimpleMode
+                placeholder="Select managing department"
+                treeDefaultExpandedKeys = {(props.mode==='edit')?[departmentDetails.parentDepartmentId]:undefined}
+          />
           </Form.Item>
 
           <Form.Item>
