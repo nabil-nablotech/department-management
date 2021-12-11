@@ -1,0 +1,1 @@
+export const enviroment = "https://localhost:5001";
